@@ -1,0 +1,104 @@
+<div class="content ">
+
+  <p-card>
+    <div class="col-12">
+      <h1>Lista de Actividades </h1>
+
+
+    </div>
+
+    <p-table #dt [value]="actividades"   styleClass="p-datatable-customers" [rowHover]="true"
+    [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50]" [loading]="loading"
+    [paginator]="true" currentPageReportTemplate="Viendo {first} hasta {last} de {totalRecords} registros"
+    [filterDelay]="0" [globalFilterFields]="['act_nombre']">
+    <ng-template pTemplate="caption">
+        <div class="table-header">
+
+            <span class="p-input-icon-left">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')" placeholder="Global Search" />
+
+            </span>
+            <button
+            pButton
+            type="button"
+            label="Agregar"
+            icon="pi pi-plus"
+            class="p-button-primary p-button-rounded mr-2 mb-2"
+            (click)="crear()"
+            >
+            </button>
+
+
+        </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+
+          <th pSortableColumn="act_id">Id <p-sortIcon field="act_id"></p-sortIcon></th>
+          <th pSortableColumn="act_nombre">Descripcion <p-sortIcon field="act_nombre"></p-sortIcon></th>
+
+
+          <th ></th>
+
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-actividad>
+      <tr >
+        <td>{{ actividad.act_id  }}</td>
+        <td>{{ actividad.act_nombre  }} </td>
+
+
+        <td>
+          <button
+          pButton
+          type="button"
+          label=""
+          icon="pi pi-pencil"
+          class="p-button-warning p-button-rounded mr-2 mb-2"
+          (click)="actualizar(actividad)"
+          >
+
+          </button>
+
+          <button
+          pButton
+          (click)="eliminar(actividad)"
+          class="p-button-danger p-button-rounded p-mr-2 mb-2"
+          icon="pi pi-trash"
+
+        ></button>
+        </td>
+      </tr>
+
+    </ng-template>
+    </p-table>
+
+  </p-card>
+</div>
+
+
+
+<p-confirmDialog #cd [style]="{ width: '50vw' }">
+  <ng-template pTemplate="header">
+    <h3>Eliminar la actividad</h3>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button
+      type="button"
+      class="p-button-outlined p-button-danger"
+      pButton
+      icon="pi pi-times"
+      label="Cancelar"
+      (click)="cd.reject()"
+    ></button>
+    <button
+      type="button"
+      class="p-button-success"
+      pButton
+      icon="pi pi-check"
+      label="Aceptar"
+      (click)="cd.accept()"
+    ></button>
+  </ng-template>
+</p-confirmDialog>

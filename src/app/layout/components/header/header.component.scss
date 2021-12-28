@@ -1,0 +1,41 @@
+@import '/src/styles.scss';
+
+
+
+.layout-toolbar{
+  padding: 0.5rem!important;
+
+  background-color: $color-secondary;
+  color: white;
+  vertical-align: middle;
+
+  display : flex;
+flex-wrap :wrap;
+justify-content: space-between;
+}
+.title{
+  font-size: 18px;
+  font-weight: bold;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  margin-block-start: 0.5em;
+  margin-block-end: 0.5em;
+
+}
+
+
+@media screen and (min-width: 961px){
+
+
+.btn-menu{
+  display: none;
+}
+
+}
+
+:host ::ng-deep .p-sidebar{
+  background-color: $color-secondary !important;
+}
+
+
+

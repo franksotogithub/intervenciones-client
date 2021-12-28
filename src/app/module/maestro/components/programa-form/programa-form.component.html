@@ -1,0 +1,85 @@
+
+<p-toast></p-toast>
+<div class="content"  *ngIf="programaModel">
+  <p-card>
+
+    <h2>{{title}}</h2>
+
+    <form [formGroup]="programaFormGroup" *ngIf="programaFormGroup" >
+      <div class="formgrid grid">
+        <div class="field col-12">
+          <label for="pro_nombre">
+            Nombre
+          </label>
+
+          <input
+
+          type="text"
+          pInputText
+          formControlName="pro_nombre"
+          class="inputfield w-full"
+          [(ngModel)]="programaModel.pro_nombre"
+          />
+
+          <small
+              class="text-danger"
+              *ngIf="
+              programaFormGroup.controls['pro_nombre']?.errors
+              "
+            >
+              {{ programaFormGroup.controls['pro_nombre'].errorMessage }}</small
+            >
+        </div>
+
+      </div>
+
+      <div class="flex justify-content-between">
+        <button
+        pButton
+        label="Guardar"
+        (click)="save()"
+        type="submit"
+
+        class="p-button-primary"
+        [disabled]="!programaModel.is_valid"
+      ></button>
+
+      <button
+      pButton
+      label="Regresar"
+      (click)="regresar()"
+      class="p-button-secundary"
+
+    ></button>
+
+
+      </div>
+    </form>
+
+  </p-card>
+</div>
+
+
+<p-confirmDialog #cd [style]="{ width: '50vw' }">
+  <ng-template pTemplate="header">
+    <h3>Guarda datos</h3>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button
+      type="button"
+      class="p-button-outlined p-button-danger"
+      pButton
+      icon="pi pi-times"
+      label="Cancelar"
+      (click)="cd.reject()"
+    ></button>
+    <button
+      type="button"
+      class="p-button-success"
+      pButton
+      icon="pi pi-check"
+      label="Aceptar"
+      (click)="cd.accept()"
+    ></button>
+  </ng-template>
+</p-confirmDialog>

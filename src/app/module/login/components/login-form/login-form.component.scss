@@ -1,0 +1,50 @@
+@import '/src/styles.scss';
+
+.header-login {
+  display : flex;
+flex-wrap :wrap;
+justify-content: space-between;
+ }
+
+
+.content{
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /*background-color: $color-secondary;*/
+  background-image: url("/assets/img/fondo.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+}
+
+@media (min-width: 600px) {
+  :host ::ng-deep .p-card{
+    width:  550px;
+    margin: auto;
+
+  }
+  img{
+    width: 200px;
+  }
+}
+
+@media (max-width: 599px) {
+  :host ::ng-deep .p-card{
+      width:  300px;
+      margin: auto;
+  }
+
+  img{
+    width: 100px;
+  }
+}
+
+
+
+
+
+
+

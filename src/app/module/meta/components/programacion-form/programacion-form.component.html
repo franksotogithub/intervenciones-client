@@ -1,0 +1,421 @@
+<p-toast></p-toast>
+<div class="content"  *ngIf="programacionModel">
+  <p-card>
+    <h2>{{title}}</h2>
+
+    <form [formGroup]="programacionFormGroup" *ngIf="programacionFormGroup" >
+      <div class="formgrid grid">
+
+      <div class="field col-6">
+          <label for="prg_nombre">
+            Nombre
+          </label>
+
+          <input
+
+          type="text"
+
+          pInputText
+          formControlName="prg_nombre"
+          class="inputfield w-full"
+          [(ngModel)]="programacionModel.prg_nombre"
+
+          />
+
+          <small
+              class="text-danger"
+              *ngIf="
+              programacionFormGroup.controls['prg_nombre']?.errors
+              "
+            >
+              {{ programacionFormGroup.controls['prg_nombre'].errorMessage }}</small
+            >
+      </div>
+      <div class="field col-3">
+        <label for="prg_fecha_inicio">
+        Fecha Inicio
+        </label>
+
+
+        <p-calendar
+        dateFormat="dd/mm/yy"
+        formControlName="prg_fecha_inicio"
+        [(ngModel)]="programacionModel.prg_fecha_inicio"
+        [style]="{'width':'100%'}"
+        [showIcon]="true"
+        [readonlyInput]="true"
+
+      ></p-calendar>
+        <small
+            class="text-danger"
+            *ngIf="
+            programacionFormGroup.controls['prg_fecha_inicio']?.errors
+            "
+          >
+            {{ programacionFormGroup.controls['prg_fecha_inicio'].errorMessage }}</small
+          >
+      </div>
+
+
+      <div class="field col-3">
+        <label for="prg_fecha_fin">
+         Fecha Fin
+        </label>
+
+        <p-calendar
+        dateFormat="dd/mm/yy"
+        [(ngModel)]="programacionModel.prg_fecha_fin"
+        formControlName="prg_fecha_fin"
+        [showIcon]="true"
+        [readonlyInput]="true"
+        [style]="{'width':'100%'}"
+      ></p-calendar>
+        <small
+            class="text-danger"
+            *ngIf="
+            programacionFormGroup.controls['prg_fecha_fin']?.errors
+            "
+          >
+            {{ programacionFormGroup.controls['prg_fecha_inicio'].errorMessage }}</small
+          >
+      </div>
+
+      <div class="field col-2">
+          <label for="prg_tipo">
+            Tipo
+          </label>
+          <p-dropdown
+          formControlName="prg_tipo"
+          [options]="prg_tipos"
+          [(ngModel)]="programacionModel.prg_tipo"
+          optionLabel="prg_tipo_desc"
+          placeholder="Seleccione un tipo"
+          optionValue="prg_tipo"
+          [style]="{'width':'100%'}"
+
+
+        ></p-dropdown>
+
+
+
+
+      </div>
+
+      <div class="field col-5">
+        <label for="prg_direccion">
+          Direccion
+        </label>
+        <div class="p-fluid  ">
+          <p-autoComplete  [(ngModel)]="programacionModel.prg_direccion"    class="custom-autocomplete w-full" [suggestions]="results"
+          formControlName="prg_direccion"   (keypress)="findLocations($event)" [minLength]="5"    (onSelect)="selectLocation($event)" >
+
+          <ng-template let-item pTemplate="item">
+            <span class="ui-autocomplete-token-label">{{item.text}} </span>
+          </ng-template>
+        </p-autoComplete>
+
+        </div>
+
+
+
+       <small  *ngIf="programacionModel.prg_lon "> Coordenadas x:{{programacionModel.prg_lon | number:'1.5-5' }} y:{{programacionModel.prg_lat | number:'1.5-5'}}</small>
+
+
+
+
+        <small
+            class="text-danger"
+            *ngIf="
+            programacionFormGroup.controls['prg_direccion']?.errors
+            "
+          >
+            {{ programacionFormGroup.controls['prg_direccion'].errorMessage }}</small
+          >
+
+
+    </div>
+
+    <div class="field col-5">
+      <label for="prg_referencia">
+        Referencia
+      </label>
+
+      <input
+
+      type="text"
+
+      pInputText
+      formControlName="prg_referencia"
+      class="inputfield w-full"
+      [(ngModel)]="programacionModel.prg_referencia"
+
+      />
+
+      <small
+          class="text-danger"
+          *ngIf="
+          programacionFormGroup.controls['prg_referencia']?.errors
+          "
+        >
+          {{ programacionFormGroup.controls['prg_referencia'].errorMessage }}</small
+        >
+
+
+
+      </div>
+
+
+    </div>
+
+
+
+
+    </form>
+
+
+
+
+
+
+  </p-card>
+</div>
+<div id="contentMap">
+  <div #mapViewNode id='mapViewNode'></div>
+</div>
+
+
+
+<p-card>
+
+Programacion de Actividades
+  <p-table #dt [value]="programacionActividades"   styleClass="p-datatable-customers" [rowHover]="true"
+  [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50]"
+  [paginator]="true" currentPageReportTemplate="Viendo {first} hasta {last} de {totalRecords} registros"
+  [filterDelay]="0" >
+
+  <ng-template pTemplate="caption">
+      <div class="table-header">
+
+          <button
+          pButton
+          type="button"
+          label="Agregar"
+          icon="pi pi-plus"
+          class="p-button-primary p-button-rounded mr-2 mb-2"
+          (click)="agregarActividad()"
+          >
+          </button>
+
+
+      </div>
+  </ng-template>
+
+
+
+  <ng-template pTemplate="header">
+    <tr>
+
+      <th pSortableColumn="pro_nombre">Programa<p-sortIcon field="pro_nombre"></p-sortIcon></th>
+      <th pSortableColumn="ger_nombre">Responsable<p-sortIcon field="ger_nombre"></p-sortIcon></th>
+      <th pSortableColumn="lia_nombre">Lina de Accion<p-sortIcon field="lia_nombre"></p-sortIcon></th>
+      <th pSortableColumn="act_nombre">Actividad<p-sortIcon field="act_nombre"></p-sortIcon></th>
+      <th pSortableColumn="ind_nombre">Indicador<p-sortIcon field="ind_nombre"></p-sortIcon></th>
+      <th pSortableColumn="pac_programado">Programado<p-sortIcon field="pac_programado"></p-sortIcon></th>
+      <th pSortableColumn="lia_nombre">Ejecutado<p-sortIcon field="lia_nombre"></p-sortIcon></th>
+
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-programacionActividad>
+    <tr >
+      <td>{{ programacionActividad.pro_nombre  }}</td>
+      <td>{{ programacionActividad.ger_nombre  }}</td>
+      <td>{{ programacionActividad.lia_nombre  }} </td>
+      <td>{{ programacionActividad.act_nombre  }} </td>
+      <td> {{ programacionActividad.ind_nombre  }}</td>
+      <td>  {{ programacionActividad.pac_programado  }} </td>
+<td></td>
+      <td>
+
+
+
+        <button
+        pButton
+        (click)="eliminarActividad(programacionActividad)"
+        class="p-button-danger p-button-rounded p-mr-2 mb-2"
+        icon="pi pi-trash"
+
+      ></button>
+      </td>
+    </tr>
+
+  </ng-template>
+  </p-table>
+
+
+  <div class="flex justify-content-between" *ngIf="programacionModel" >
+    <button
+    pButton
+    label="Guardar"
+    (click)="save()"
+    type="submit"
+
+    class="p-button-primary"
+    [disabled]="!programacionModel.is_valid"
+  ></button>
+
+  <button
+  pButton
+  label="Regresar"
+  (click)="regresar()"
+  class="p-button-secundary"
+
+></button>
+
+
+</div>
+
+</p-card>
+
+
+
+<p-confirmDialog #cd [style]="{ width: '50vw' }">
+  <ng-template pTemplate="header">
+    <h3>Guarda datos</h3>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button
+      type="button"
+      class="p-button-outlined p-button-danger"
+      pButton
+      icon="pi pi-times"
+      label="Cancelar"
+      (click)="cd.reject()"
+    ></button>
+    <button
+      type="button"
+      class="p-button-success"
+      pButton
+      icon="pi pi-check"
+      label="Aceptar"
+      (click)="cd.accept()"
+    ></button>
+  </ng-template>
+</p-confirmDialog>
+
+
+
+
+
+
+
+
+
+
+
+<p-dialog [(visible)]="displayDialogProgramacionActividad" [style]="{'width':'80%'}" [contentStyle]="{'overflow':'visible'}">
+  <ng-template pTemplate="header">
+      Agregar Actividad
+  </ng-template>
+
+
+  <div class="form-grid grid" >
+    <div class="field col-12" >
+
+
+      <p-table #dt2 [value]="metaAnuales"   styleClass="p-datatable-customers" [rowHover]="true"
+      [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50]" [loading]="loading"
+      [paginator]="true" currentPageReportTemplate="Viendo {first} hasta {last} de {totalRecords} registros"
+      [filterDelay]="0" [globalFilterFields]="['ger_nombre','pro_nombre','lia_nombre','act_nombre','ind_nombre','ume_nombre']"  [(selection)]="metaAnualSelect">
+      <ng-template pTemplate="caption">
+          <div class="table-header">
+
+
+            <span class="p-input-icon-left">
+              <i class="pi pi-search"></i>
+              <input pInputText type="text" (input)="dt2.filterGlobal($any($event.target).value, 'contains')" placeholder="Global Search" />
+
+          </span>
+
+          </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+
+
+            <th pSortableColumn="ger_nombre">Responsable <p-sortIcon field="ger_nombre"></p-sortIcon></th>
+            <th pSortableColumn="pro_nombre">Programa <p-sortIcon field="pro_nombre"></p-sortIcon></th>
+            <th pSortableColumn="lia_nombre">Linea acción <p-sortIcon field="lia_nombre"></p-sortIcon></th>
+            <th pSortableColumn="act_nombre">Actividad <p-sortIcon field="act_nombre"></p-sortIcon></th>
+            <th pSortableColumn="ind_nombre">Indicador <p-sortIcon field="ind_nombre"></p-sortIcon></th>
+            <th pSortableColumn="ume_nombre">Unidad <p-sortIcon field="ume_nombre"></p-sortIcon></th>
+            <th pSortableColumn="asi_meta">Meta <p-sortIcon field="asi_meta"></p-sortIcon></th>
+
+            <th > Accion</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-metaAnual>
+        <tr  [pSelectableRow]="metaAnual" (click)="metaAnualSelect=metaAnual">
+          <td>{{ metaAnual.ger_nombre  }}</td>
+          <td>{{ metaAnual.pro_nombre  }}</td>
+          <td>{{ metaAnual.lia_nombre  }} </td>
+          <td>{{ metaAnual.act_nombre  }} </td>
+          <td>{{ metaAnual.ind_nombre  }} </td>
+          <td>{{ metaAnual.ume_nombre  }} </td>
+          <td>{{ metaAnual.asi_meta  }} </td>
+          <td> <button *ngIf="metaAnualSelect && metaAnualSelect.asi_id  && metaAnualSelect.asi_id==metaAnual.asi_id "     class="p-button-secundary"
+            pButton
+            icon="pi pi-check" ></button>
+
+          </td>
+        </tr>
+
+      </ng-template>
+      </p-table>
+
+
+    </div>
+
+    <div class="field col-12" >
+      <label>Programado</label>
+
+      <input
+
+      type="text"
+      pInputText
+      impOnlyNumber
+      class="inputfield w-full"
+
+      [(ngModel)]="pac_programado"
+      />
+      <small
+          class="text-danger"
+          *ngIf="
+          pac_programado==0
+          "
+
+        >
+          *El dato no puede ser cero</small
+        >
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <button
+    type="button"
+    class="p-button-outlined p-button-danger"
+    pButton
+    icon="pi pi-times"
+    label="Cancelar"
+    (click)="displayDialogProgramacionActividad=false"
+  ></button>
+  <button
+    type="button"
+    class="p-button-success"
+    pButton
+    icon="pi pi-check"
+    label="Aceptar"
+    (click)="aceptarGuardarActividad()"
+  ></button>
+  </ng-template>
+
+  </p-dialog>

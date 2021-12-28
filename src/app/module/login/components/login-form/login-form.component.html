@@ -1,0 +1,82 @@
+<div class="content" [ngStyle]="{'background-image': 'url('+image+')'}">
+
+
+
+
+    <div class="p-grid">
+      <p-card>
+
+        <div class="header-login">
+          <div>
+            <img src="assets/img/logo-imp.png" />
+          </div>
+
+          <div>
+            <img src="assets/img/logo-munlima.png" />
+          </div>
+        </div>
+
+
+        <form [formGroup]="loginFormGroup">
+          <div class="p-fluid">
+            <div class="p-field">
+              <label for="firstname1">Usuario</label>
+              <input
+                id="firstname1"
+                type="text"
+                pInputText
+                autocomplete="off"
+                class="input-login"
+                placeholder="Escriba el usuario"
+                type="text"
+                formControlName="username"
+                [(ngModel)]="loginModel.username"
+              />
+              <small
+                class="text-danger"
+                *ngIf="
+                  loginFormGroup.controls['username']?.errors &&
+                  (loginFormGroup.controls['username'].dirty ||
+                    loginFormGroup.controls['username'].touched)
+                "
+              >
+                {{ loginFormGroup.controls['username']['errorMessage'] }}</small
+              >
+            </div>
+
+            <div class="p-field">
+              <label for="lastname1">Password</label>
+              <input
+                id="lastname1"
+                pInputText
+                type="password"
+                formControlName="password"
+                placeholder="Escriba la contraseña"
+                [(ngModel)]="loginModel.password"
+              />
+              <small
+                class="text-danger"
+                *ngIf="
+                  loginFormGroup.controls['password']?.errors &&
+                  (loginFormGroup.controls['password'].dirty ||
+                    loginFormGroup.controls['password'].touched)
+                "
+              >
+                {{ loginFormGroup.controls['password']['errorMessage'] }}</small
+              >
+            </div>
+            <br>
+
+            <div class="p-field">
+              <button
+                pButton
+                label="Ingresar"
+                (click)="login()"
+                type="submit"
+              ></button>
+            </div>
+          </div>
+        </form>
+      </p-card>
+    </div>
+  </div>

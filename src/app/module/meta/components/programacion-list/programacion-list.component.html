@@ -1,0 +1,169 @@
+<div class="content ">
+
+  <p-card>
+
+
+
+    <div class="col-12">
+      <h1>Programacion de Intervenciones</h1>
+
+
+
+    </div>
+
+    <div class="formgrid grid">
+<!--
+      <div class="field col">
+
+        <label for ="">Meta:</label>
+        <p-dropdown
+
+        [options]="metas"
+        [(ngModel)]="filters.asi_id"
+
+        placeholder="Seleccione una meta"
+        optionValue="asi_id"
+        [style]="{'width':'100%'}"
+        class="inputfield w-full"
+        [showClear]="true"
+        (ngModelChange)="changeFilter()"
+
+      >
+
+      <ng-template pTemplate="selectedItem" let-select>
+        <div  *ngIf="filters.asi_id">
+          {{select.asi_anio}}/ {{select.pro_nombre}}/ {{select.lia_nombre}}/ {{select.act_nombre}}/ {{select.ind_nombre}}
+
+        </div>
+    </ng-template>
+
+      <ng-template let-meta pTemplate="item">
+
+
+            <div>{{meta.asi_anio}}/ {{meta.pro_nombre}}/ {{meta.lia_nombre}}/ {{meta.act_nombre}}/ {{meta.ind_nombre}} </div>
+
+    </ng-template>
+
+
+
+    </p-dropdown>
+
+      </div>
+
+    -->
+    </div>
+
+
+    <p-table #dt [value]="programaciones"   styleClass="p-datatable-customers" [rowHover]="true"
+    [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50]" [loading]="loading"
+    [paginator]="true" currentPageReportTemplate="Viendo {first} hasta {last} de {totalRecords} registros"
+    [filterDelay]="0" [globalFilterFields]="['act_nombre']">
+
+
+
+
+
+    <ng-template pTemplate="caption">
+        <div class="table-header">
+
+
+
+
+            <button
+            pButton
+            type="button"
+            label="Agregar"
+            icon="pi pi-plus"
+            class="p-button-primary p-button-rounded mr-2 mb-2"
+            (click)="crear()"
+            >
+            </button>
+
+
+        </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+
+
+
+          <th pSortableColumn="prg_nombre">Nombre <p-sortIcon field="prg_nombre"></p-sortIcon></th>
+          <th pSortableColumn="prg_tipo_desc">Tipo <p-sortIcon field="prg_tipo_desc"></p-sortIcon></th>
+          <th >Lugar </th>
+          <th >Referencia </th>
+          <th pSortableColumn="prg_fecha_inicio">Fecha Inicio<p-sortIcon field="prg_fecha_inicio"></p-sortIcon></th>
+          <th pSortableColumn="prg_fecha_fin">Fecha Fin<p-sortIcon field="prg_fecha_fin"></p-sortIcon></th>
+          <th >#Ejecutados </th>
+          <th >%Ejecutado </th>
+
+
+          <th ></th>
+
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-metaAnual>
+      <tr >
+
+        <td>{{ metaAnual.prg_nombre  }}</td>
+        <td>{{ metaAnual.prg_tipo_desc  }}</td>
+        <td>{{ metaAnual.prg_direccion  }} </td>
+        <td>{{ metaAnual.prg_referencia  }} </td>
+        <td>{{ metaAnual.prg_fecha_inicio| date:'dd/MM/YYYY' }} </td>
+        <td>{{ metaAnual.prg_fecha_fin  | date:'dd/MM/YYYY'}} </td>
+        <td> </td>
+        <td> </td>
+
+        <td>
+          <button
+          pButton
+          type="button"
+          label=""
+          icon="pi pi-pencil"
+          class="p-button-warning p-button-rounded mr-2 mb-2"
+          (click)="actualizar(metaAnual)"
+          >
+
+          </button>
+
+          <button
+          pButton
+          (click)="eliminar(metaAnual)"
+          class="p-button-danger p-button-rounded p-mr-2 mb-2"
+          icon="pi pi-trash"
+
+        ></button>
+        </td>
+      </tr>
+
+    </ng-template>
+    </p-table>
+
+  </p-card>
+</div>
+
+
+
+<p-confirmDialog #cd [style]="{ width: '50vw' }">
+  <ng-template pTemplate="header">
+    <h3>Eliminar la metaAnual</h3>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button
+      type="button"
+      class="p-button-outlined p-button-danger"
+      pButton
+      icon="pi pi-times"
+      label="Cancelar"
+      (click)="cd.reject()"
+    ></button>
+    <button
+      type="button"
+      class="p-button-success"
+      pButton
+      icon="pi pi-check"
+      label="Aceptar"
+      (click)="cd.accept()"
+    ></button>
+  </ng-template>
+</p-confirmDialog>
+

@@ -1,0 +1,328 @@
+<p-toast></p-toast>
+<div class="content"  *ngIf="metaAnualModel">
+  <p-card>
+    <h2>{{title}}</h2>
+
+    <form [formGroup]="metaAnualFormGroup" *ngIf="metaAnualFormGroup" >
+      <div class="formgrid grid">
+
+        <div class="field col-12">
+          <label for="asi_anio">
+            Año
+          </label>
+
+          <input
+
+          type="number"
+
+          pInputText
+          formControlName="asi_anio"
+          class="inputfield w-full"
+          [(ngModel)]="metaAnualModel.asi_anio"
+          impOnlyNumber
+          />
+
+          <small
+              class="text-danger"
+              *ngIf="
+              metaAnualFormGroup.controls['asi_anio']?.errors
+              "
+            >
+              {{ metaAnualFormGroup.controls['asi_anio'].errorMessage }}</small
+            >
+        </div>
+
+        <div class="field col-12">
+          <label for="pro_id">
+            Programa
+          </label>
+          <p-dropdown
+          formControlName="pro_id"
+          [options]="programas"
+          [(ngModel)]="metaAnualModel.pro_id"
+          optionLabel="pro_nombre"
+          placeholder="Seleccione un programa"
+          optionValue="pro_id"
+          [style]="{'width':'100%'}"
+          (ngModelChange)="changePrograma($event)"
+
+        ></p-dropdown>
+
+
+          <small
+              class="text-danger"
+              *ngIf="
+              metaAnualFormGroup.controls['pro_id']?.errors
+              "
+            >
+              {{ metaAnualFormGroup.controls['pro_id'].errorMessage }}</small
+            >
+        </div>
+
+
+        <div class="field col-12">
+          <label for="lia_id">
+            Linea de Accion
+          </label>
+          <p-dropdown
+          formControlName="lia_id"
+          [options]="accions"
+          [(ngModel)]="metaAnualModel.lia_id"
+          optionLabel="lia_nombre"
+          placeholder="Seleccione la linea de accion"
+          optionValue="lia_id"
+          [style]="{'width':'100%'}"
+          (ngModelChange)="changeAccion($event)"
+
+        ></p-dropdown>
+
+
+          <small
+              class="text-danger"
+              *ngIf="
+              metaAnualFormGroup.controls['lia_id']?.errors
+              "
+            >
+              {{ metaAnualFormGroup.controls['lia_id'].errorMessage }}</small
+            >
+        </div>
+
+
+
+        <div class="field col-12">
+          <label for="act_id">
+            Actividad
+          </label>
+          <p-dropdown
+          formControlName="act_id"
+          [options]="actividades"
+          [(ngModel)]="metaAnualModel.act_id"
+          optionLabel="act_nombre"
+          placeholder="Seleccione la actividad"
+          optionValue="act_id"
+          [style]="{'width':'100%'}"
+
+
+        ></p-dropdown>
+
+
+          <small
+              class="text-danger"
+              *ngIf="
+              metaAnualFormGroup.controls['act_id']?.errors
+              "
+            >
+              {{ metaAnualFormGroup.controls['act_id'].errorMessage }}</small
+            >
+        </div>
+
+
+        <div class="field col-12">
+          <label for="act_id">
+            Indicador
+          </label>
+          <p-dropdown
+          formControlName="ind_id"
+          [options]="indicadores"
+          [(ngModel)]="metaAnualModel.ind_id"
+          optionLabel="ind_nombre"
+          placeholder="Seleccione la actividad"
+          optionValue="ind_id"
+          [style]="{'width':'100%'}"
+
+
+        ></p-dropdown>
+
+
+          <small
+              class="text-danger"
+              *ngIf="
+              metaAnualFormGroup.controls['ind_id']?.errors
+              "
+            >
+              {{ metaAnualFormGroup.controls['ind_id'].errorMessage }}</small
+            >
+        </div>
+
+        <div class="field col-12">
+          <label for="act_id">
+            Unidad de medida
+          </label>
+          <p-dropdown
+          formControlName="ume_id"
+          [options]="unidades"
+          [(ngModel)]="metaAnualModel.ume_id"
+          optionLabel="ume_nombre"
+          placeholder="Seleccione la unidad de medida"
+          optionValue="ume_id"
+          [style]="{'width':'100%'}"
+
+
+        >
+
+
+        <ng-template let-group pTemplate="group">
+          <div class="d-flex ai-center">
+
+              <span>{{group.ume_nombre}}  {{group.ume_simbolo}}</span>
+          </div>
+        </ng-template>
+      </p-dropdown>
+
+
+          <small
+              class="text-danger"
+              *ngIf="
+              metaAnualFormGroup.controls['ind_id']?.errors
+              "
+            >
+              {{ metaAnualFormGroup.controls['ind_id'].errorMessage }}</small
+            >
+        </div>
+
+        <div class="field col-12">
+          <label for="asi_meta">
+            Meta
+          </label>
+
+          <input
+
+          type="text"
+          pInputText
+          formControlName="asi_meta"
+          class="inputfield w-full"
+          [(ngModel)]="metaAnualModel.asi_meta"
+          impOnlyNumber
+          />
+
+          <small
+              class="text-danger"
+              *ngIf="
+              metaAnualFormGroup.controls['asi_meta']?.errors
+              "
+            >
+              {{ metaAnualFormGroup.controls['asi_meta'].errorMessage }}</small
+            >
+        </div>
+
+
+
+        <div class="field col-12">
+          <label for="ger_id">
+            Gerencia
+          </label>
+          <p-dropdown
+          formControlName="ger_id"
+          [options]="gerencias"
+          [(ngModel)]="metaAnualModel.ger_id"
+          optionLabel="ger_nombre"
+          placeholder="Seleccione una gerencia"
+          optionValue="ger_id"
+          [style]="{'width':'100%'}"
+
+
+        >
+
+
+      </p-dropdown>
+
+
+          <small
+              class="text-danger"
+              *ngIf="
+              metaAnualFormGroup.controls['ger_id']?.errors
+              "
+            >
+              {{ metaAnualFormGroup.controls['ger_id'].errorMessage }}</small
+            >
+        </div>
+
+
+
+
+        <div class="field col-12">
+          <label for="sge_id">
+            SubGerencia
+          </label>
+          <p-dropdown
+          formControlName="sge_id"
+          [options]="subgerencias"
+          [(ngModel)]="metaAnualModel.sge_id"
+          optionLabel="sge_nombre"
+          placeholder="Seleccione una subgerencia"
+          optionValue="sge_id"
+          [style]="{'width':'100%'}"
+
+
+        >
+
+
+      </p-dropdown>
+
+
+          <small
+              class="text-danger"
+              *ngIf="
+              metaAnualFormGroup.controls['ger_id']?.errors
+              "
+            >
+              {{ metaAnualFormGroup.controls['ger_id'].errorMessage }}</small
+            >
+        </div>
+
+
+
+
+      </div>
+
+      <div class="flex justify-content-between">
+        <button
+        pButton
+        label="Guardar"
+        (click)="save()"
+        type="submit"
+
+        class="p-button-primary"
+        [disabled]="!metaAnualModel.is_valid"
+      ></button>
+
+      <button
+      pButton
+      label="Regresar"
+      (click)="regresar()"
+      class="p-button-secundary"
+
+    ></button>
+
+
+      </div>
+
+    </form>
+
+  </p-card>
+</div>
+
+
+<p-confirmDialog #cd [style]="{ width: '50vw' }">
+  <ng-template pTemplate="header">
+    <h3>Guarda datos</h3>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button
+      type="button"
+      class="p-button-outlined p-button-danger"
+      pButton
+      icon="pi pi-times"
+      label="Cancelar"
+      (click)="cd.reject()"
+    ></button>
+    <button
+      type="button"
+      class="p-button-success"
+      pButton
+      icon="pi pi-check"
+      label="Aceptar"
+      (click)="cd.accept()"
+    ></button>
+  </ng-template>
+</p-confirmDialog>

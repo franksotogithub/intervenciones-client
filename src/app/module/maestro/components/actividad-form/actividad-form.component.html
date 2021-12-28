@@ -1,0 +1,138 @@
+<p-toast></p-toast>
+<div class="content"  *ngIf="actividadModel">
+  <p-card>
+    <h2>{{title}}</h2>
+
+    <form [formGroup]="actividadFormGroup" *ngIf="actividadFormGroup" >
+      <div class="formgrid grid">
+        <div class="field col-12">
+          <label for="act_nombre">
+            Descripcion
+          </label>
+
+          <input
+
+          type="text"
+          pInputText
+          formControlName="act_nombre"
+          class="inputfield w-full"
+          [(ngModel)]="actividadModel.act_nombre"
+          />
+
+          <small
+              class="text-danger"
+              *ngIf="
+              actividadFormGroup.controls['act_nombre']?.errors
+              "
+            >
+              {{ actividadFormGroup.controls['act_nombre'].errorMessage }}</small
+            >
+        </div>
+
+        <div class="field col-12">
+          <label for="prg_id">
+            Programa
+          </label>
+          <p-dropdown
+          formControlName="prg_id"
+          [options]="programas"
+          [(ngModel)]="actividadModel.prg_id"
+          optionLabel="pro_nombre"
+          placeholder="Seleccione un programa"
+          optionValue="pro_id"
+          [style]="{'width':'100%'}"
+          (ngModelChange)="changePrograma($event)"
+
+        ></p-dropdown>
+
+
+          <small
+              class="text-danger"
+              *ngIf="
+              actividadFormGroup.controls['prg_id']?.errors
+              "
+            >
+              {{ actividadFormGroup.controls['prg_id'].errorMessage }}</small
+            >
+        </div>
+
+
+        <div class="field col-12">
+          <label for="lia_id">
+            Linea de Accion
+          </label>
+          <p-dropdown
+          formControlName="lia_id"
+          [options]="accions"
+          [(ngModel)]="actividadModel.lia_id"
+          optionLabel="lia_nombre"
+          placeholder="Seleccione la linea de accion"
+          optionValue="lia_id"
+          [style]="{'width':'100%'}"
+
+
+        ></p-dropdown>
+
+
+          <small
+              class="text-danger"
+              *ngIf="
+              actividadFormGroup.controls['lia_id']?.errors
+              "
+            >
+              {{ actividadFormGroup.controls['lia_id'].errorMessage }}</small
+            >
+        </div>
+
+      </div>
+
+      <div class="flex justify-content-between">
+        <button
+        pButton
+        label="Guardar"
+        (click)="save()"
+        type="submit"
+
+        class="p-button-primary"
+        [disabled]="!actividadModel.is_valid"
+      ></button>
+
+      <button
+      pButton
+      label="Regresar"
+      (click)="regresar()"
+      class="p-button-secundary"
+
+    ></button>
+
+
+      </div>
+    </form>
+
+  </p-card>
+</div>
+
+
+<p-confirmDialog #cd [style]="{ width: '50vw' }">
+  <ng-template pTemplate="header">
+    <h3>Guarda datos</h3>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button
+      type="button"
+      class="p-button-outlined p-button-danger"
+      pButton
+      icon="pi pi-times"
+      label="Cancelar"
+      (click)="cd.reject()"
+    ></button>
+    <button
+      type="button"
+      class="p-button-success"
+      pButton
+      icon="pi pi-check"
+      label="Aceptar"
+      (click)="cd.accept()"
+    ></button>
+  </ng-template>
+</p-confirmDialog>

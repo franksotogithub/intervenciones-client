@@ -1,0 +1,20 @@
+@import '/src/styles.scss';
+
+
+
+.menu-content{
+  height: 100%;
+  background-color: $color-secondary !important;
+  img{
+    width: 200px;
+    margin: 1rem;
+
+  }
+
+}
+
+
+:host ::ng-deep .p-panelmenu .p-panelmenu-header > a{
+  background-color: $color-secondary !important;
+  color: white;
+}
