@@ -39,7 +39,7 @@ export class ProgramacionModel implements ProgramacionUI{
 
   constructor(p ?: ProgramacionUI){
     this.prg_id = p?.prg_id;
-    this.prg_tipo = 1;
+    this.prg_tipo = p?p.prg_tipo:1;
     this.prg_nombre = p?.prg_nombre;
     this.prg_direccion = p?.prg_direccion;
     this.prg_referencia = p?.prg_referencia;

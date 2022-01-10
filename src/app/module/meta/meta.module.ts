@@ -36,6 +36,19 @@ import { ProgramacionActividadService } from './shared/services/programacion-act
 import { ProgramacionActividadApiService } from './shared/services/programacion-actividad/programacion-actividad-api.service';
 import { EjecucionListComponent } from './components/ejecucion-list/ejecucion-list.component';
 import { EjecucionFormComponent } from './components/ejecucion-form/ejecucion-form.component';
+import { EjecucionService } from './shared/services/ejecucion/ejecucion.service';
+import { EjecucionApiService } from './shared/services/ejecucion/ejecucion-api.service';
+import { EjecucionActividadService } from './shared/services/ejecucion-actividad/ejecucion-actividad.service';
+import { EjecucionActividadApiService } from './shared/services/ejecucion-actividad/ejecucion-actividad-api.service';
+
+import { PersonaApiService } from '@app/shared/services/persona/persona-api.service';
+import { PersonaService } from '@app/shared/services/persona/persona.service';
+import { ArchivoService } from '@app/shared/services/archivo/archivo.service';
+import { ArchivoApiService } from '@app/shared/services/archivo/archivo-api.service';
+import { EjecucionEvidenciaService } from './shared/services/ejecucion-evidencia/ejecucion-evidencia.service';
+import { EjecucionEvidenciaApiService } from './shared/services/ejecucion-evidencia/ejecucion-evidencia-api.service';
+import { EjecucionValidacionService } from './shared/services/ejecucion-validacion/ejecucion-validacion.service';
+import { EjecucionValidacionApiService } from './shared/services/ejecucion-validacion/ejecucion-validacion-api.service';
 
 
 
@@ -109,6 +122,38 @@ EjecucionFormComponent
       useClass: ProgramacionActividadApiService
     },
 
+
+    {
+      provide: EjecucionService,
+      useClass: EjecucionApiService
+    },
+    {
+      provide: EjecucionActividadService,
+      useClass: EjecucionActividadApiService
+    },
+
+
+    {
+      provide: PersonaService,
+      useClass: PersonaApiService
+    },
+
+
+    {
+      provide: ArchivoService,
+      useClass: ArchivoApiService
+    },
+
+
+    {
+      provide: EjecucionEvidenciaService,
+      useClass: EjecucionEvidenciaApiService
+    },
+
+    {
+      provide: EjecucionValidacionService,
+      useClass: EjecucionValidacionApiService
+    },
   ]
 
 })

@@ -44,11 +44,7 @@ export class MenuComponent implements OnInit {
             icon: 'pi pi-fw pi-map',
             routerLink: ['/maestro/accion'],
           },
-          {
-            label: 'Actividad',
-            icon: 'pi pi-fw pi-map',
-            routerLink: ['/maestro/actividad'],
-          },
+
           {
             label: 'Unidad de medida',
             icon: 'pi pi-fw pi-map',
@@ -59,6 +55,12 @@ export class MenuComponent implements OnInit {
             icon: 'pi pi-fw pi-map',
             routerLink: ['/maestro/indicador'],
           },
+          {
+            label: 'Actividad',
+            icon: 'pi pi-fw pi-map',
+            routerLink: ['/maestro/actividad'],
+          },
+
 
         ],
 

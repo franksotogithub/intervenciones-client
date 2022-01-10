@@ -1,1 +1,729 @@
-<p>ejecucion-form works!</p>
+<p-toast></p-toast>
+<div class="content"  *ngIf="ejecucionModel">
+  <p-card>
+    <h2>{{title}}</h2>
+
+
+    <p-tabView>
+      <p-tabPanel header="Localizacion">
+
+        <form [formGroup]="ejecucionFormGroup" *ngIf="ejecucionFormGroup" >
+          <div class="formgrid grid">
+
+          <div class="field md:col-6 col-12">
+              <label for="eje_nombre">
+                Nombre
+              </label>
+
+              <input
+
+              type="text"
+
+              pInputText
+              formControlName="eje_nombre"
+              class="inputfield w-full"
+              [(ngModel)]="ejecucionModel.eje_nombre"
+
+              />
+
+              <small
+                  class="text-danger"
+                  *ngIf="
+                  ejecucionFormGroup.controls['eje_nombre']?.errors
+                  "
+                >
+                  {{ ejecucionFormGroup.controls['eje_nombre'].errorMessage }}</small
+                >
+          </div>
+          <div class="field md:col-3 col-12">
+            <label for="eje_fecha_inicio">
+            Fecha Inicio
+            </label>
+
+
+            <p-calendar
+            dateFormat="dd/mm/yy"
+            formControlName="eje_fecha_inicio"
+            [(ngModel)]="ejecucionModel.eje_fecha_inicio"
+            [style]="{'width':'100%'}"
+            [showIcon]="true"
+            [readonlyInput]="true"
+
+          ></p-calendar>
+            <small
+                class="text-danger"
+                *ngIf="
+                ejecucionFormGroup.controls['eje_fecha_inicio']?.errors
+                "
+              >
+                {{ ejecucionFormGroup.controls['eje_fecha_inicio'].errorMessage }}</small
+              >
+          </div>
+
+
+          <div class="field md:col-3  col-12">
+            <label for="eje_fecha_fin">
+             Fecha Fin
+            </label>
+
+            <p-calendar
+            dateFormat="dd/mm/yy"
+            [(ngModel)]="ejecucionModel.eje_fecha_fin"
+            formControlName="eje_fecha_fin"
+            [showIcon]="true"
+            [readonlyInput]="true"
+            [style]="{'width':'100%'}"
+          ></p-calendar>
+            <small
+                class="text-danger"
+                *ngIf="
+                ejecucionFormGroup.controls['eje_fecha_fin']?.errors
+                "
+              >
+                {{ ejecucionFormGroup.controls['eje_fecha_inicio'].errorMessage }}</small
+              >
+          </div>
+
+          <div class="field md:col-5  col-12">
+            <label for="eje_direccion">
+              Direccion
+            </label>
+            <div class="p-fluid  ">
+              <p-autoComplete  [(ngModel)]="ejecucionModel.eje_direccion"    class="custom-autocomplete w-full" [suggestions]="results"
+              formControlName="eje_direccion"   (keypress)="findLocations($event)" [minLength]="5"    (onSelect)="selectLocation($event)" >
+
+              <ng-template let-item pTemplate="item">
+                <span class="ui-autocomplete-token-label">{{item.text}} </span>
+              </ng-template>
+            </p-autoComplete>
+
+            </div>
+
+
+
+           <small  *ngIf="ejecucionModel.eje_lon "> Coordenadas x:{{ejecucionModel.eje_lon | number:'1.5-5' }} y:{{ejecucionModel.eje_lat | number:'1.5-5'}}</small>
+
+
+
+
+            <small
+                class="text-danger"
+                *ngIf="
+                ejecucionFormGroup.controls['eje_direccion']?.errors
+                "
+              >
+                {{ ejecucionFormGroup.controls['eje_direccion'].errorMessage }}</small
+              >
+
+
+          </div>
+
+          <div class="field md:col-5  col-12">
+          <label for="eje_referencia">
+            Referencia
+          </label>
+
+          <input
+
+          type="text"
+
+          pInputText
+          formControlName="eje_referencia"
+          class="inputfield w-full"
+          [(ngModel)]="ejecucionModel.eje_referencia"
+
+          />
+
+          <small
+              class="text-danger"
+              *ngIf="
+              ejecucionFormGroup.controls['eje_referencia']?.errors
+              "
+            >
+              {{ ejecucionFormGroup.controls['eje_referencia'].errorMessage }}</small
+            >
+
+
+
+          </div>
+
+
+        </div>
+
+
+        </form>
+
+          <div #mapViewNode id='mapViewNode'></div>
+
+
+      </p-tabPanel>
+      <p-tabPanel header="Actividades">
+
+        <p-table #dt [value]="ejecucionActividades"   styleClass="p-datatable-customers" [rowHover]="true"
+        [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50]"
+        [paginator]="true" currentPageReportTemplate="Viendo {first} hasta {last} de {totalRecords} registros"
+        [filterDelay]="0" >
+
+        <ng-template pTemplate="caption">
+            <div class="table-header">
+
+                <button
+                pButton
+                type="button"
+                label="Agregar"
+                icon="pi pi-plus"
+                class="p-button-primary p-button-rounded mr-2 mb-2"
+                (click)="agregarActividad()"
+                >
+                </button>
+
+
+            </div>
+        </ng-template>
+
+
+
+        <ng-template pTemplate="header">
+          <tr>
+
+            <th pSortableColumn="pro_nombre">Programa<p-sortIcon field="pro_nombre"></p-sortIcon></th>
+            <th pSortableColumn="ger_nombre">Responsable<p-sortIcon field="ger_nombre"></p-sortIcon></th>
+            <th pSortableColumn="lia_nombre">Lina de Accion<p-sortIcon field="lia_nombre"></p-sortIcon></th>
+            <th pSortableColumn="act_nombre">Actividad<p-sortIcon field="act_nombre"></p-sortIcon></th>
+            <th pSortableColumn="ind_nombre">Indicador<p-sortIcon field="ind_nombre"></p-sortIcon></th>
+            <th pSortableColumn="pac_programado">Programado<p-sortIcon field="pac_programado"></p-sortIcon></th>
+            <th pSortableColumn="lia_nombre">Ejecutado<p-sortIcon field="lia_nombre"></p-sortIcon></th>
+            <th pSortableColumn="lia_nombre"># beneficiados<p-sortIcon field="lia_nombre"></p-sortIcon></th>
+            <th>Acciones </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-ejecucionActividad>
+          <tr >
+            <td>{{ ejecucionActividad.pro_nombre  }}</td>
+            <td>{{ ejecucionActividad.ger_nombre  }}</td>
+            <td>{{ ejecucionActividad.lia_nombre  }} </td>
+            <td>{{ ejecucionActividad.act_nombre  }} </td>
+            <td> {{ ejecucionActividad.ind_nombre  }}</td>
+            <td> {{ ejecucionActividad.eac_programado }}</td>
+             <td>{{ ejecucionActividad.eac_ejecutado  }} </td>
+             <td>{{ ejecucionActividad.eac_nro_beneficiados }} </td>
+
+            <td>
+
+              <button
+              pButton
+              (click)="removerActividad(ejecucionActividad)"
+              class="p-button-danger p-button-rounded p-mr-2 mb-2"
+              icon="pi pi-trash"
+
+            ></button>
+            </td>
+          </tr>
+
+        </ng-template>
+        </p-table>
+
+
+      </p-tabPanel>
+      <p-tabPanel header="Evidencias">
+
+
+        <div class=" formgrid grid">
+<div class="field col-12">
+  <h2>Evidencias</h2>
+
+
+
+</div>
+
+
+          <div *ngFor="let ejecucionEvidencia of ejecucionEvidencias;  let i = index " class="field md:col-4 col-12"  >
+
+
+            <div class="p-d-flex  p-jc-between">
+
+              <button
+              pButton
+              type="button"
+              icon="pi pi-times"
+              class="p-button-danger mr-2 p-as-end with-20"
+
+              (click)="removerEvidencia($event, i,ejecucionEvidencia)"
+            ></button>
+
+            </div>
+            <img src="data:image/png;base64,{{ejecucionEvidencia.img}}" width="200">
+            <!--<div class="col-4">
+
+              <img src="data:image/png;base64,{{ejecucionEvidencia.img}}" width="200">
+            </div>-->
+
+          </div>
+
+
+
+
+
+
+<div class="field col-12">
+  <h2> Nuevas Evidencias</h2>
+
+
+
+</div>
+
+<div class="field col-12 md-12">
+  <p-fileUpload  #fileInput
+  name="fileInput"
+  [customUpload]="true"
+  [multiple]="true"
+  accept="image/*"
+
+
+  name="fileInput"
+  >
+
+
+  <ng-template pTemplate="content">
+    <ul *ngIf="uploadedFiles.length">
+        <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
+    </ul>
+  </ng-template>
+
+  </p-fileUpload>
+
+</div>
+
+</div>
+
+      </p-tabPanel>
+      <p-tabPanel header="Validacion">
+        <form  >
+
+          <div class="formgrid grid" >
+<div class="field col-12" *ngIf="ejecucionModel && ejecucionModel.eej_id &&ejecucionModel.eej_id<4">
+  <div *ngFor="let estado of estados" class="field-checkbox"  >
+
+
+    <p-radioButton name="groupname"  [value]="estado.eej_id" [(ngModel)]="ejecucionValicacionTemp.eej_id" (change)="changeEstado()" ></p-radioButton>
+    <label [for]="estado.eej_id">{{estado.eej_nombre}}&nbsp;</label>
+
+
+</div>
+  <div class="field col-12"  >
+    <label for="mensaje">
+     Mensaje
+    </label>
+
+    <input
+
+    type="text"
+
+    pInputText
+
+    class="inputfield w-full"
+    [(ngModel)]="ejecucionValicacionTemp.eva_mensaje"
+    />
+
+
+</div>
+
+<div class="field col-12">
+  <button
+  pButton
+  type="button"
+  label="Enviar"
+  icon="pi pi-mail"
+  class="p-button-primary "
+  (click)="enviarValidacion()"
+  >
+  </button>
+
+
+</div>
+
+</div>
+
+
+
+
+
+        <div class="field col-12">
+
+
+          <p-timeline [value]="events1" align="alternate"  styleClass="customized-timeline">
+
+            <ng-template pTemplate="content" let-event>
+                <p-card [header]="event.status" [subheader]="event.date">
+<p>{{event.mensaje}}</p>
+
+                </p-card>
+            </ng-template>
+        </p-timeline>
+
+        </div>
+
+
+        <div class="field col-12" *ngIf="ejecucionValicacion && ejecucionValicacion.eej_nombre && ejecucionValicacion.es_enviado ">
+
+ <p-card   [header]="ejecucionValicacion.eej_nombre" >
+<p>{{ejecucionValicacion.eva_mensaje}}</p>
+
+                </p-card>
+        </div>
+
+          </div>
+
+
+        </form>
+
+      </p-tabPanel>
+
+  </p-tabView>
+</p-card>
+
+
+
+
+</div>
+
+
+
+
+
+<p-card>
+
+
+
+    <div class="flex justify-content-between" *ngIf="ejecucionModel" >
+      <button
+      pButton
+      label="Guardar"
+      (click)="save()"
+      type="submit"
+
+      class="p-button-primary"
+      [disabled]="!ejecucionModel.is_valid"
+    ></button>
+
+    <button
+    pButton
+    label="Regresar"
+    (click)="regresar()"
+    class="p-button-secundary"
+
+  ></button>
+
+
+  </div>
+
+  </p-card>
+
+
+
+  <p-confirmDialog #cd [style]="{ width: '50vw' }">
+    <ng-template pTemplate="header">
+      <h3>Guarda datos</h3>
+    </ng-template>
+    <ng-template pTemplate="footer">
+      <button
+        type="button"
+        class="p-button-outlined p-button-danger"
+        pButton
+        icon="pi pi-times"
+        label="Cancelar"
+        (click)="cd.reject()"
+      ></button>
+      <button
+        type="button"
+        class="p-button-success"
+        pButton
+        icon="pi pi-check"
+        label="Aceptar"
+        (click)="cd.accept()"
+      ></button>
+    </ng-template>
+  </p-confirmDialog>
+
+
+
+
+
+
+  <p-dialog [(visible)]="displayDialogProgramacionActividad" [style]="{'width':'80%'}" [contentStyle]="{'overflow':'visible'}">
+    <ng-template pTemplate="header">
+        Ejecucion Actividad
+    </ng-template>
+
+    <div class="formgrid grid" >
+
+
+      <div class="field col-3" >
+        <label>Año</label>
+
+        <input
+
+        type="number"
+        pInputText
+        impOnlyNumber
+        class="inputfield w-full"
+        [(ngModel)]="filters.asi_anio"
+        (ngModelChange)="changeFilter()"
+        />
+
+
+
+      </div>
+
+      <div class="field col-6" >
+
+
+        <div class="p-field-radiobutton">
+          <p-radioButton name="groupname" value="1" [(ngModel)]="filters.programado" (ngModelChange)="filterProgramado()"  inputId="programado"></p-radioButton>
+
+          <label for="programado">Programado</label>
+      </div>
+      <div class="p-field-radiobutton">
+          <p-radioButton name="groupname" value="0" [(ngModel)]="filters.programado" (ngModelChange)="filterProgramado()" inputId="no_programado"></p-radioButton>
+          <label for="no_programado">No Programado</label>
+      </div>
+
+
+
+
+
+
+
+
+      </div>
+      <div class="field col-12" >
+
+        <p-table #dt2 [value]="metaAnualesDataTable"   styleClass="p-datatable-customers" [rowHover]="true"
+        [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50]" [loading]="loading"
+        [paginator]="true" currentPageReportTemplate="Viendo {first} hasta {last} de {totalRecords} registros"
+        [filterDelay]="0" [globalFilterFields]="['ger_nombre','pro_nombre','lia_nombre','act_nombre','ind_nombre','ume_nombre']"  [(selection)]="metaAnualSelect">
+        <ng-template pTemplate="caption">
+            <div class="table-header">
+
+
+              <span class="p-input-icon-left">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" (input)="dt2.filterGlobal($any($event.target).value, 'contains')" placeholder="Global Search" />
+
+            </span>
+
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+
+
+              <th pSortableColumn="ger_nombre">Responsable <p-sortIcon field="ger_nombre"></p-sortIcon></th>
+              <th pSortableColumn="pro_nombre">Programa <p-sortIcon field="pro_nombre"></p-sortIcon></th>
+              <th pSortableColumn="lia_nombre">Linea acción <p-sortIcon field="lia_nombre"></p-sortIcon></th>
+              <th pSortableColumn="act_nombre">Actividad <p-sortIcon field="act_nombre"></p-sortIcon></th>
+
+              <th pSortableColumn="ind_nombre">Indicador <p-sortIcon field="ind_nombre"></p-sortIcon></th>
+              <th pSortableColumn="ume_nombre">Unidad <p-sortIcon field="ume_nombre"></p-sortIcon></th>
+              <th pSortableColumn="prg_nombre" *ngIf="filters.programado==1">Nombre Intervencion Programada <p-sortIcon field="prg_nombre"></p-sortIcon></th>
+
+              <th pSortableColumn="asi_meta">Meta <p-sortIcon field="asi_meta"></p-sortIcon></th>
+              <th pSortableColumn="pac_programado" *ngIf="filters.programado==1">Programado <p-sortIcon field="pac_programado"></p-sortIcon></th>
+
+              <th > Accion</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-metaAnual>
+          <tr  [pSelectableRow]="metaAnual" (click)="seleccionarMetaAnual(metaAnual)">
+            <td>{{ metaAnual.ger_nombre  }}</td>
+            <td>{{ metaAnual.pro_nombre  }}</td>
+            <td>{{ metaAnual.lia_nombre  }} </td>
+            <td>{{ metaAnual.act_nombre  }} </td>
+
+            <td>{{ metaAnual.ind_nombre  }} </td>
+            <td>{{ metaAnual.ume_nombre  }} </td>
+            <td *ngIf="filters.programado==1">{{ metaAnual.prg_nombre  }} </td>
+
+
+            <td>{{ metaAnual.asi_meta  }} </td>
+            <td *ngIf="filters.programado==1">{{ metaAnual.pac_programado  }} </td>
+            <td>
+
+    <ng-container *ngIf="filters.programado==1;else no_programado;">
+      <button *ngIf="metaAnualSelect && metaAnualSelect.pac_id  && metaAnualSelect.pac_id==metaAnual.pac_id "     class="p-button-secundary"
+      pButton
+      icon="pi pi-check" ></button>
+              </ng-container>
+
+              <ng-template #no_programado>
+                <button *ngIf="metaAnualSelect && metaAnualSelect.asi_id  && metaAnualSelect.asi_id==metaAnual.asi_id "     class="p-button-secundary"
+                pButton
+                icon="pi pi-check" ></button>
+              </ng-template>
+
+
+
+            </td>
+          </tr>
+
+        </ng-template>
+        </p-table>
+
+
+        </div>
+
+
+    </div>
+
+
+    <form [formGroup]="ejecucionActividadFormGroup" *ngIf="ejecucionActividadFormGroup" >
+
+    <div class="form-grid grid" >
+      <div class="field col-12" >
+        <small
+        class="text-danger"
+         *ngIf="
+         ejecucionActividadFormGroup.controls['asi_id']?.errors
+         "
+        >
+        {{ ejecucionActividadFormGroup.controls['asi_id'].errorMessage }}</small
+        >
+      </div>
+
+
+      <div class="field col-4" >
+        <label>Responsable DNI-Nombres</label>
+
+        <!--<input
+
+        type="text"
+        pInputText
+        impOnlyNumber
+        class="inputfield w-full"
+        formControlName="eac_ejecutado"
+        [(ngModel)]="ejecucionActividad.per_id"
+        />-->
+
+
+        <p-dropdown
+        formControlName="per_id"
+        [options]="personas"
+        [(ngModel)]="ejecucionActividad.per_id"
+
+        placeholder="Seleccione un responsable"
+
+        [style]="{'width':'100%'}"
+        [filterBy]="'per_nro_doc'"
+        [showClear]="true"
+        [filter]="true"
+        optionValue="per_id"
+      >
+
+      <ng-template  let-persona pTemplate="selectedItem">
+        <div class="country-item country-item-value" >
+
+          {{persona.per_nro_doc}}- {{persona.per_nombre1}} {{persona.per_nombre2}} {{persona.per_apellido1}} {{persona.per_apellido2}}
+        </div>
+    </ng-template>
+      <ng-template let-persona pTemplate="item">
+        <div class="d-flex ">
+
+            {{persona.per_nro_doc}}- {{persona.per_nombre1}} {{persona.per_nombre2}} {{persona.per_apellido1}} {{persona.per_apellido2}}
+        </div>
+    </ng-template>
+
+
+
+
+    </p-dropdown>
+
+
+        <small
+        class="text-danger"
+         *ngIf="
+         ejecucionActividadFormGroup.controls['per_id']?.errors
+         "
+        >
+        {{ ejecucionActividadFormGroup.controls['per_id'].errorMessage }}</small
+        >
+
+      </div>
+
+      <div class="field col-4" >
+        <label>Ejecutado</label>
+
+        <input
+
+        type="text"
+        pInputText
+        impOnlyNumber
+        class="inputfield w-full"
+        formControlName="eac_ejecutado"
+        [(ngModel)]="ejecucionActividad.eac_ejecutado"
+        />
+
+
+        <small
+        class="text-danger"
+         *ngIf="
+         ejecucionActividadFormGroup.controls['eac_ejecutado']?.errors
+         "
+        >
+        {{ ejecucionActividadFormGroup.controls['eac_ejecutado'].errorMessage }}</small
+        >
+
+      </div>
+
+      <div class="field col-4" >
+        <label>Nro de beneficiados</label>
+
+        <input
+
+        type="text"
+        pInputText
+        impOnlyNumber
+        class="inputfield w-full"
+        formControlName="eac_nro_beneficiados"
+        [(ngModel)]="ejecucionActividad.eac_nro_beneficiados"
+        />
+        <small
+        class="text-danger"
+         *ngIf="
+         ejecucionActividadFormGroup.controls['eac_nro_beneficiados']?.errors
+         "
+        >
+        {{ ejecucionActividadFormGroup.controls['eac_nro_beneficiados'].errorMessage }}</small
+        >
+      </div>
+
+    </div>
+  </form>
+
+
+
+    <ng-template pTemplate="footer">
+      <button
+      type="button"
+      class="p-button-outlined p-button-danger"
+      pButton
+      icon="pi pi-times"
+      label="Cancelar"
+      (click)="displayDialogProgramacionActividad=false"
+    ></button>
+    <button
+      type="button"
+      class="p-button-success"
+      pButton
+      icon="pi pi-check"
+      label="Aceptar"
+      [disabled]="!ejecucionActividad.is_valid"
+
+      (click)="aceptarGuardarActividad()"
+    ></button>
+    </ng-template>
+
+    </p-dialog>
+
+
+
+

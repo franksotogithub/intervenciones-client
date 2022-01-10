@@ -85,9 +85,7 @@ export class MetaAnualFormComponent implements OnInit {
           case  Constants.PATH_CREATE:
             this.title ='Nueva MetaAnual';
             this.metaAnualModel =new MetaAnualModel();
-            this.metaAnualModel.asi_anio =2021;
-
-
+            this.metaAnualModel.asi_anio =new Date().getFullYear();
             break;
 
           case  Constants.PATH_UPDATE:

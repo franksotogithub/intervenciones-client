@@ -7,7 +7,7 @@ import { ProgramacionModel } from '../../shared/models/programacion/programacion
 import { ProgramacionService } from '../../shared/services/programacion/programacion.service';
 
 import {  WKT,GeoJSON} from 'ol/format';
-
+import * as turf from '@turf/turf';
 import { forkJoin } from 'rxjs/internal/observable/forkJoin';
 
 import {Map,tileLayer,marker} from 'leaflet';
@@ -58,12 +58,21 @@ export class ProgramacionFormComponent implements OnInit ,AfterViewInit{
 
   private view: any = null;
   wkid=4326;
-  prg_tipos =[{prg_tipo:1,prg_tipo_desc:'Punto'} , {prg_tipo:1,prg_tipo_desc:'Barrio'}]
+
+
+  prg_tipos =[{prg_tipo:1,prg_tipo_desc:'Punto'} , {prg_tipo:2,prg_tipo_desc:'Barrio'}]
   feature:any;
   pac_programado:number=0;
   programacionActividades: ProgramacionActividadUI[]=[];
   listDeleteprogramacionActividades :ProgramacionActividadUI[]=[];
   programacionActividadModel : ProgramacionActividadModel= new ProgramacionActividadModel();
+  anio=new Date().getFullYear();
+  filters = {asi_anio:this.anio ,prg_id:0};
+
+  filtersAsignacion ={ asi_anio:this.anio ,prg_id:0 };
+
+  activivadProgramadoValid =false;
+
 
   constructor(
     private formBuilder: RxFormBuilder,
@@ -152,7 +161,7 @@ fetch( this.urlFindAddressCandidates+'?'+params).then(response => response.json(
 
     let x=data.candidates[0].location.x;
     let y=data.candidates[0].location.y;
-    this.addMarkerCurrentLocation(y, x);
+    this.addFeatureIni(true,y, x);
     this.currentLocation(y,x);
   }
 });
@@ -168,7 +177,8 @@ fetch( this.urlFindAddressCandidates+'?'+params).then(response => response.json(
 
 
   ngOnInit(): void {
-    this.listMetaAnual();
+    this.changeActivivadProgramadoValid();
+    this.listMetaAnual(this.filtersAsignacion);
     this.settingPage();
 
     this.settingForm();
@@ -293,7 +303,7 @@ fetch( this.urlFindAddressCandidates+'?'+params).then(response => response.json(
 
 
   initializeMap(): any {
-    this.map = new Map("mapViewNode").setView([-12.0328,-77.1298], 15);
+    this.map = new Map("mapViewNode").setView([-12.0328,-77.1298], 17);
     tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
     {
       maxZoom: 21,
@@ -331,12 +341,105 @@ fetch( this.urlFindAddressCandidates+'?'+params).then(response => response.json(
       var layer = event.layer;
 
 
-      this.updateWKT();
+      this.updateWKT(true);
 
     });
 
   }
 
+  changeTipo(){
+    console.log('this.programacionModel.prg_tipo>>>',this.programacionModel.prg_tipo)
+    let latitude =this.programacionModel.prg_lat;
+    let longitude =this.programacionModel.prg_lon;
+
+    if(this.programacionModel.prg_lat && this.programacionModel.prg_lon){
+      if(this.programacionModel.prg_tipo==2){
+        this.addPolygon(true,latitude,longitude);
+      }
+      else if (this.programacionModel.prg_tipo==1){
+        this.addPoint(true,latitude,longitude);
+      }
+    }
+
+
+  }
+
+  /*addNewPolygon(latitude:any,longitude:any){
+    if(this.feature)this.drawItems.removeLayer(this.feature);
+    let r=0.0005;
+    let coords = [[ latitude-r ,longitude-r],[latitude+r ,longitude-r],[latitude+r ,longitude+r],[latitude-r ,longitude+r]];
+    this.feature = L.polygon(coords, {color: 'blue'});
+    this.drawItems.addLayer( this.feature);
+
+    this.updateWKT(false);
+
+
+
+  }
+*/
+
+addPolygon(is_new:boolean,latitude:any,longitude:any, prg_geom_json_string?:any){
+
+  if(this.feature)this.drawItems.removeLayer(this.feature);
+
+  if(is_new){
+    let r=0.0005;
+    let coords = [[ latitude-r ,longitude-r],[latitude+r ,longitude-r],[latitude+r ,longitude+r],[latitude-r ,longitude+r]];
+    this.feature = L.polygon(coords, {color: 'blue'});
+    this.drawItems.addLayer( this.feature);
+
+    this.updateWKT(false);
+  }
+
+  else{
+
+
+
+    let prg_geom_json=JSON.parse(prg_geom_json_string);
+    console.log('prg_geom_json>>>',prg_geom_json);
+     let coords = prg_geom_json.coordinates;
+     /*this.feature=L.geoJSON(prg_geom_json);
+     this.drawItems.addLayer(this.feature);*/
+     console.log('coords[0][0]>>>',coords[0]);
+     let newCoords=[coords[0].map((c:any)=> { return [c[1],c[0]]})]
+
+    this.feature = L.polygon(newCoords, {color: 'blue'});
+
+    /*L.geoJSON(prg_geom_json, {
+      onEachFeature: (e:any)=>{
+        console.log('feature>>>',e)
+
+      }
+  })*/
+
+    this.drawItems.addLayer( this.feature);
+  }
+
+
+}
+
+addPoint(isNew:boolean,latitude:any,longitude:any){
+  if(this.feature)this.drawItems.removeLayer(this.feature);
+  let current_location = L.icon({
+    iconUrl: 'assets/img/marker-icon.png',
+  });
+  if(isNew){
+
+    this.feature= L.marker([latitude, longitude], {icon: current_location});
+    this.drawItems.addLayer( this.feature);
+    this.updateWKT(false);
+  }
+  else{
+    this.feature= L.marker([latitude, longitude], {icon: current_location});
+    this.drawItems.addLayer( this.feature);
+  }
+
+
+
+
+
+  //this.updateWKT(false);
+}
 
   getCurrentPoint(addMarker:boolean,prg_geom_json ?:string){
 
@@ -349,9 +452,11 @@ fetch( this.urlFindAddressCandidates+'?'+params).then(response => response.json(
 
 
             if(prg_geom_json && this.programacionModel.prg_lat &&  this.programacionModel.prg_lon){
+
+              console.log('prg_geom_json>>>',prg_geom_json);
               this.currentLocation(this.programacionModel.prg_lat,this.programacionModel.prg_lon);
 
-              (addMarker)?this.addMarkerCurrentLocation(this.programacionModel.prg_lat,this.programacionModel.prg_lon):false;
+              (addMarker)?this.addFeatureIni(false,this.programacionModel.prg_lat,this.programacionModel.prg_lon,prg_geom_json):false;
 
 
 
@@ -362,7 +467,7 @@ fetch( this.urlFindAddressCandidates+'?'+params).then(response => response.json(
 
               this.currentLocation(data.coords.latitude,data.coords.longitude);
 
-              (addMarker)?this.addMarkerCurrentLocation(data.coords.latitude,data.coords.longitude):false;
+              (addMarker)?this.addFeatureIni(true,data.coords.latitude,data.coords.longitude):false;
 
               this.reverseGeocode(data.coords.longitude,data.coords.latitude,);
 
@@ -389,40 +494,74 @@ fetch( this.urlFindAddressCandidates+'?'+params).then(response => response.json(
 
 
 
-    addMarkerCurrentLocation(latitude:any, longitude:any){
+    addFeatureIni(isNew :boolean,latitude:any, longitude:any ,prg_geom_json_string?:any){
+
+
        if(this.feature)this.drawItems.removeLayer(this.feature);
 
-      var current_location = L.icon({
-        iconUrl: 'assets/img/marker-icon.png',
-      });
-      console.log('latitude:',latitude,'longitude:',longitude)
+       if(this.programacionModel.prg_tipo ==1){
+        this.addPoint(isNew,latitude,longitude);
 
-      this.feature= L.marker([latitude, longitude], {icon: current_location});
+      }
 
-      this.drawItems.addLayer( this.feature);
-      this.updateWKT();
+      else if(this.programacionModel.prg_tipo ==2) {
 
 
+        this.addPolygon(isNew,latitude,longitude,prg_geom_json_string);
 
+      }
+      /*console.log('latitude:',latitude,'longitude:',longitude)*/
+
+
+      /*if(isNew && this.programacionModel.prg_tipo ==1){
+        this.addPoint(latitude,longitude);
+
+      }
+
+      else if(isNew && this.programacionModel.prg_tipo ==2) {
+
+
+        this.addNewPolygon(latitude,longitude);
+
+      }
+
+      else if(isNew && this.programacionModel.prg_tipo ==1) {
+
+
+        this.addPoint(latitude,longitude);
+
+      }*/
 
 
 
     }
 
-    updateWKT(){
+    updateWKT(updateFeature:boolean=false){
       let layerGeoJSON = this.drawItems.toGeoJSON();
       let wkt_options = {};
       let geojson_format = new GeoJSON();
       let testFeature = geojson_format.readFeatures(layerGeoJSON);
+      console.log('layerGeoJSON.features>>>',layerGeoJSON.features);
+      console.log('testFeature>>>',testFeature);
       let wkt = new WKT(wkt_options);
       let out = wkt.writeFeatures(testFeature);
       this.programacionModel.prg_geom_wkt=out;
 
 
-      if(layerGeoJSON && layerGeoJSON.features && layerGeoJSON.features[0]){
+      if(updateFeature && layerGeoJSON && layerGeoJSON.features && layerGeoJSON.features[0]){
         if(this.programacionModel.prg_tipo==1){
           this.programacionModel.prg_lon=layerGeoJSON.features[0].geometry.coordinates[0];
           this.programacionModel.prg_lat=layerGeoJSON.features[0].geometry.coordinates[1];
+
+        }
+
+        else if (this.programacionModel.prg_tipo==2){
+
+          let coords=layerGeoJSON.features[0].geometry.coordinates;
+          let poly1 = turf.polygon(coords);
+          let centroid = turf.centroid(poly1);
+          this.programacionModel.prg_lat=centroid.geometry.coordinates[1];
+          this.programacionModel.prg_lon=centroid.geometry.coordinates[0];
 
         }
 
@@ -454,6 +593,20 @@ fetch( this.urlFindAddressCandidates+'?'+params).then(response => response.json(
 
   }
 
+   changeActivivadProgramadoValid(){
+     this.activivadProgramadoValid=(this.metaAnualSelect && this.metaAnualSelect.asi_id  && this.pac_programado>0 )?true:false;
+
+
+
+   }
+
+   clickSelectMetaAnualSelect(metaAnual: MetaAnualUI){
+     this.metaAnualSelect=metaAnual;
+     this.changeActivivadProgramadoValid();
+
+   }
+   /*(click)="metaAnualSelect=metaAnual"*/
+
   aceptarGuardarActividad(){
     let programacionActividad: ProgramacionActividadModel = new ProgramacionActividadModel();
     programacionActividad.pac_id =0;
@@ -476,8 +629,8 @@ fetch( this.urlFindAddressCandidates+'?'+params).then(response => response.json(
 
 
   listProgramacionActividad(idProgramacion:number){
-
-    this.programacionActividadService.programacionActividadList({prg_id:idProgramacion,asi_anio:2021})?.subscribe(res=>{
+    this.filters.prg_id=idProgramacion;
+    this.programacionActividadService.programacionActividadList(this.filters)?.subscribe(res=>{
       this.programacionActividades=res;
 
     });
@@ -561,12 +714,15 @@ fetch( this.urlFindAddressCandidates+'?'+params).then(response => response.json(
 
   }
 
-  listMetaAnual(){
-    this.metaAnualService.metaAnualList()?.subscribe((list:MetaAnualUI[])=>{
+  listMetaAnual(filters?:any){
+
+    this.metaAnualService.metaAnualList(filters)?.subscribe((list:MetaAnualUI[])=>{
         this.metaAnuales = list;
     });
   }
 
-
+  changeFilter(){
+    this.listMetaAnual(this.filtersAsignacion);
+  }
 
 }

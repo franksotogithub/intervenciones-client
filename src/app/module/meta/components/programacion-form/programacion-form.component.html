@@ -93,7 +93,7 @@
           optionValue="prg_tipo"
           [style]="{'width':'100%'}"
 
-
+(onChange)="changeTipo()"
         ></p-dropdown>
 
 
@@ -182,7 +182,6 @@
 <div id="contentMap">
   <div #mapViewNode id='mapViewNode'></div>
 </div>
-
 
 
 <p-card>
@@ -319,6 +318,60 @@ Programacion de Actividades
 
 
   <div class="form-grid grid" >
+
+
+      <div class="field col">
+        <label for ="">Año:</label>
+        <input
+        type="number"
+        pInputText
+        class="inputfield w-full"
+        [(ngModel)]="filtersAsignacion.asi_anio"
+        (ngModelChange)="changeFilter()"
+        >
+      </div>
+      <!--
+      <div class="field col">
+
+        <label for ="">Programa:</label>
+        <p-dropdown
+
+        [options]="programas"
+        [(ngModel)]="filters.pro_id"
+        optionLabel="pro_nombre"
+        placeholder="Seleccione un programa"
+        optionValue="pro_id"
+        [style]="{'width':'100%'}"
+        class="inputfield w-full"
+        [showClear]="true"
+        (ngModelChange)="changeFilter()"
+
+      >
+
+    </p-dropdown>
+
+
+      </div>
+
+      <div class="field col">
+        <label for ="">Gerencia Responsable:</label>
+        <p-dropdown
+
+        [options]="gerencias"
+        [(ngModel)]="filters.ger_id"
+        optionLabel="ger_nombre"
+        placeholder="Seleccione un responsable"
+        optionValue="ger_id"
+        [style]="{'width':'100%'}"
+        [showClear]="true"
+        (ngModelChange)="changeFilter()"
+      >
+
+    </p-dropdown>
+      </div>-->
+
+
+
     <div class="field col-12" >
 
 
@@ -354,7 +407,7 @@ Programacion de Actividades
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-metaAnual>
-        <tr  [pSelectableRow]="metaAnual" (click)="metaAnualSelect=metaAnual">
+        <tr  [pSelectableRow]="metaAnual" (click)="clickSelectMetaAnualSelect(metaAnual)">
           <td>{{ metaAnual.ger_nombre  }}</td>
           <td>{{ metaAnual.pro_nombre  }}</td>
           <td>{{ metaAnual.lia_nombre  }} </td>
@@ -384,8 +437,9 @@ Programacion de Actividades
       pInputText
       impOnlyNumber
       class="inputfield w-full"
-
+min="0"
       [(ngModel)]="pac_programado"
+      (ngModelChange)="changeActivivadProgramadoValid()"
       />
       <small
           class="text-danger"
@@ -415,6 +469,7 @@ Programacion de Actividades
     icon="pi pi-check"
     label="Aceptar"
     (click)="aceptarGuardarActividad()"
+    [disabled]="!activivadProgramadoValid"
   ></button>
   </ng-template>
 

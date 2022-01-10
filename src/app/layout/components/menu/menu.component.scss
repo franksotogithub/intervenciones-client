@@ -18,3 +18,21 @@
   background-color: $color-secondary !important;
   color: white;
 }
+
+
+
+
+:host ::ng-deep .p-panelmenu .p-menuitem {
+  background-color: $color-secondary !important;
+  color: white;
+}
+
+
+:host ::ng-deep .p-panelmenu .p-panelmenu-content {
+  background-color: $color-secondary !important;
+  color: white;
+}
+
+:host ::ng-deep .p-panelmenu .p-panelmenu-content .p-menuitem .p-menuitem-link .p-menuitem-text {
+  color: white;
+}

@@ -11,17 +11,20 @@ import { EjecucionService } from '../../shared/services/ejecucion/ejecucion.serv
 })
 export class EjecucionListComponent implements OnInit {
 
-  filters ={ };
+  /*filters ={ };*/
 
   ejecuciones : EjecucionUI[]=[];
   loading= false;
+  anio = new Date().getFullYear();
+  filters ={ eje_anio:this.anio }
+
   constructor(private ejecucionService: EjecucionService, private router:Router,private confirmationService: ConfirmationService) { }
 
   ngOnInit(): void {
     this.list();
-    /*this.metasList();*/
 
-    }
+
+  }
 
   actualizar(ejecucion:EjecucionUI){
     this.router.navigate(['meta/ejecucion',ejecucion.eje_id,'update']);

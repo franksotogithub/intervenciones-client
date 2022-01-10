@@ -14,6 +14,8 @@ import { ProgramacionUI } from "@app/module/meta/shared/models/programacion/prog
 import { UtilHelper } from "./util.helper";
 import { EjecucionRequest } from "@app/module/meta/shared/models/ejecucion/ejecucion.request";
 import { EjecucionUI } from "@app/module/meta/shared/models/ejecucion/ejecucion.ui";
+import { EjecucionActividadRequest } from "@app/module/meta/shared/models/ejecucion-actividad/ejecucion-actividad.request";
+import { EjecucionActividadUI } from "@app/module/meta/shared/models/ejecucion-actividad/ejecucion-actividad.ui";
 
 
 
@@ -92,6 +94,7 @@ export class FormatHelper {
       prg_nombre :p.prg_nombre,
       prg_lon : p.prg_lon,
       prg_referencia:p.prg_referencia,
+
       prg_tipo:p.prg_tipo,
       prg_tipo_desc: p.prg_tipo_desc,
       prg_fecha_fin : UtilHelper.parseUTCDate(p.prg_fecha_fin),
@@ -120,28 +123,33 @@ eje_referencia:e.eje_referencia,
 eje_fecha_inicio :UtilHelper.parseUTCDate(e.eje_fecha_inicio),
 eje_fecha_fin: UtilHelper.parseUTCDate(e.eje_fecha_fin),
 eej_nombre:e.eej_nombre,
-eej_id :e.eej_id
+eej_id :e.eej_id,
+fecha_crea:UtilHelper.parseUTCDate(e.fecha_crea)
     }as EjecucionUI
   }
 
-
-
-
 /*
+  public formatRequestEjecucionActividad(e:EjecucionActividadRequest): EjecucionActividadUI{
 
- prg_id ?:number;
-  prg_tipo ?:number;
-  prg_tipo_desc ?:string;
-  prg_nombre ?:string;
-  prg_direccion ?:string;
-  prg_referencia ?:Date;
-  prg_fecha_inicio ?:Date;
-  prg_fecha_fin ?:string;
-  prg_geom_wkt ?: string;
-  prg_lon ?: number;
-  prg_lat ?: number;
+    return {
+      act_id : e.act_id,
+      act_nombre :e.act_nombre,
+      asi_anio : e.asi_anio,
+      asi_ejecutado :e.asi_ejecutado,
+      asi_ejecutado_p:e.asi_ejecutado_p,
+      asi_id:e.asi_id,
+      asi_meta :e.asi_meta,
+      asi_num_activ :e.asi_num_activ,
+      asi_num_activ_total :e.asi_num_activ_total,
+      asi_num_barrio_activ:e.asi_num_barrio_activ,
+      asi_num_barrio_inter:e.asi_num_barrio_inter,
+      eac_ejecutado :e.eac_ejecutado,
+      eac_id:e.eac_id,
+      eac_nombre_ejecutor:e.eac_nombre_ejecutor,
+      eac_nro_beneficiados:e.eac_nro_beneficiados
 
-*/
+    } as EjecucionActividadUI
+  }*/
 
 
 

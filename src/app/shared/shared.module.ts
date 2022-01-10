@@ -21,6 +21,9 @@ import {TableModule} from 'primeng/table';
 import {ConfirmDialogModule} from 'primeng/confirmdialog';
 import {DialogModule} from 'primeng/dialog';
 import { ToastModule } from "primeng/toast";
+import {TabViewModule} from 'primeng/tabview';
+import {TimelineModule} from 'primeng/timeline';
+
 @NgModule({
   declarations: [OnlyNumbersDirective,
 
@@ -47,6 +50,8 @@ import { ToastModule } from "primeng/toast";
     ConfirmDialogModule,
     DialogModule,
     ToastModule,
+    TabViewModule,
+    TimelineModule,
   ],
   exports:[OnlyNumbersDirective,
 
@@ -69,7 +74,9 @@ import { ToastModule } from "primeng/toast";
     ConfirmDialogModule,
     DialogModule,
     ToastModule,
-    OnlyNumbersDirective
+
+    TabViewModule,
+    TimelineModule,
   ]
 })
 export class SharedModule { }

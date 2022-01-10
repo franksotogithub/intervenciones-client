@@ -1,0 +1,26 @@
+@import '/src/styles.scss';
+#mapViewNode {
+
+
+  height: 200px;
+  width: 100%;
+}
+
+
+@media (min-width: 600px) {
+  #mapViewNode {
+
+
+    height: 500px;
+    width: 100%;
+  }
+
+}
+
+
+#contentMap {
+  padding: 10px;
+}
+.custom-autocomplete{
+  width: 100%;
+}

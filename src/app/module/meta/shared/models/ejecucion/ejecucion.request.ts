@@ -9,7 +9,7 @@ export interface EjecucionRequest{
   eje_referencia ?:string;
   eje_fecha_inicio ?:string;
   eje_fecha_fin ?: string;
-  eje_geom_wkt ?: number;
+  eje_geom_wkt ?: string;
   eje_lon ?: number;
   eje_lat?:number;
   eej_nombre ?:string;

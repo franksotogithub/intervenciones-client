@@ -12,17 +12,28 @@
     </div>
 
     <div class="formgrid grid">
-<!--
+
+      <div class="field md:col-6">
+        <label for ="">Año:</label>
+        <input
+        type="number"
+        pInputText
+        class="inputfield w-full"
+        [(ngModel)]="filters.eje_anio"
+        (ngModelChange)="changeFilter()"
+        >
+      </div>
+      <!--
       <div class="field col">
 
-        <label for ="">Meta:</label>
+        <label for ="">Programa:</label>
         <p-dropdown
 
-        [options]="metas"
-        [(ngModel)]="filters.asi_id"
-
-        placeholder="Seleccione una meta"
-        optionValue="asi_id"
+        [options]="programas"
+        [(ngModel)]="filters.pro_id"
+        optionLabel="pro_nombre"
+        placeholder="Seleccione un programa"
+        optionValue="pro_id"
         [style]="{'width':'100%'}"
         class="inputfield w-full"
         [showClear]="true"
@@ -30,27 +41,10 @@
 
       >
 
-      <ng-template pTemplate="selectedItem" let-select>
-        <div  *ngIf="filters.asi_id">
-          {{select.asi_anio}}/ {{select.pro_nombre}}/ {{select.lia_nombre}}/ {{select.act_nombre}}/ {{select.ind_nombre}}
-
-        </div>
-    </ng-template>
-
-      <ng-template let-meta pTemplate="item">
-
-
-            <div>{{meta.asi_anio}}/ {{meta.pro_nombre}}/ {{meta.lia_nombre}}/ {{meta.act_nombre}}/ {{meta.ind_nombre}} </div>
-
-    </ng-template>
-
-
-
     </p-dropdown>
+  -->
 
-      </div>
 
-    -->
     </div>
 
 

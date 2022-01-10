@@ -9,7 +9,7 @@ export interface EjecucionUI{
   eje_referencia ?:string;
   eje_fecha_inicio ?:Date;
   eje_fecha_fin ?: Date;
-  eje_geom_wkt ?: number;
+  eje_geom_wkt ?: string;
   eje_lon ?: number;
   eje_lat?:number;
   eej_nombre ?:string;

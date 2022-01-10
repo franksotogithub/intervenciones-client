@@ -2,7 +2,7 @@
 
   <p-button icon="pi pi-bars"   class="p-button-primary btn-menu"  (click)="display = true" ></p-button>
 
-    <div class="title">{{title}}</div>
+    <div class="title" class="title">{{title}}</div>
 
     <div><p-splitButton icon="pi pi-user" *ngIf="session && session.usuNombre" label="{{session.usuNombre  }}"    class="p-button-primary" [model]="items"></p-splitButton></div>
 

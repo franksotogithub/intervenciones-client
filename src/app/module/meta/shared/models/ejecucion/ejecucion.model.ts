@@ -1,26 +1,47 @@
+import { prop, required } from "@rxweb/reactive-form-validators";
 import { EjecucionUI } from "./ejecucion.ui";
 
 
 export class EjecucionModel implements EjecucionUI{
 
   eje_anio ?:number;
+
   ubigeo ?:string;
   nombdist ?:string;
   eje_id ?:number;
+
+  @prop()
+  @required({ message: '* Campo obligatorio' })
   eje_nombre ?:string;
+
+  @prop()
+  @required({ message: '* Campo obligatorio' })
   eje_direccion ?:string;
+
+  @prop()
+  @required({ message: '* Campo obligatorio' })
   eje_referencia ?:string;
+
+  @prop()
+  @required({ message: '* Campo obligatorio' })
   eje_fecha_inicio ?:Date;
+
+  @prop()
+  @required({ message: '* Campo obligatorio' })
   eje_fecha_fin ?: Date;
-  eje_geom_wkt ?: number;
+
+  eje_geom_wkt ?: string;
+
+@prop()
   eje_lon ?: number;
+  @prop()
   eje_lat?:number;
   eej_nombre ?:string;
   eej_id?:number;
 eje_nro_beneficiados?:number;
 
 fecha_crea?:Date;
-
+is_valid? :boolean;
 constructor(e?:EjecucionUI){
   this.eje_anio = e?.eje_anio;
   this.ubigeo = e?.ubigeo;
@@ -37,7 +58,7 @@ constructor(e?:EjecucionUI){
   this.eje_nro_beneficiados = e?.eje_nro_beneficiados;
   this.fecha_crea = e?.fecha_crea;
   this.eej_nombre=e?.eej_nombre;
-  this.eej_id =e?.eej_id;
+  this.eej_id = (e && e.eej_id)?e.eej_id:1;
 
  }
 }

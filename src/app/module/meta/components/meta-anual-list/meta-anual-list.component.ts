@@ -17,7 +17,8 @@ import { MetaAnualService } from '../../shared/services/meta-anual/meta-anual.se
 export class MetaAnualListComponent implements OnInit {
   programas : ProgramaUI[]=[];
   gerencias: GerenciaUI[]=[];
-  filters ={ asi_anio:2021 ,pro_id:null,ger_id:null }
+  anio = new Date().getFullYear();
+  filters ={ asi_anio:this.anio ,pro_id:null,ger_id:null }
   metaAnuales : MetaAnualUI[]=[];
   loading= false;
   constructor(private metaAnualService: MetaAnualService, private router:Router,private confirmationService: ConfirmationService ,private programaService : ProgramaService, private gerenciaService: GerenciaService) { }

@@ -84,7 +84,7 @@ export class EjecucionApiService extends EjecucionService {
   public override ejecucionUpdate(ejecucion: EjecucionModel): Observable<any>| null | undefined {
     let payload= ejecucion
 
-    return this.http.post<GeneralDataRequest<EjecucionUI[]>>(`${EndPoints.EJECUCION_DELETE}`,payload).pipe(map((res)=>{
+    return this.http.post<GeneralDataRequest<EjecucionUI[]>>(`${EndPoints.EJECUCION_UPDATE}`,payload).pipe(map((res)=>{
       let response;
       if(res.status){
         response=  res.data[0];
@@ -100,9 +100,9 @@ export class EjecucionApiService extends EjecucionService {
 
 
   public override ejecucionDelete(id:number): Observable<any>| null | undefined {
-    let payload= {prg_id:id}
+    let payload= {eje_id:id}
 
-    return this.http.post<GeneralDataRequest<EjecucionUI[]>>(`${EndPoints.PROGRAMACION_DELETE}`,payload).pipe(map((res)=>{
+    return this.http.post<GeneralDataRequest<EjecucionUI[]>>(`${EndPoints.EJECUCION_DELETE}`,payload).pipe(map((res)=>{
       let response;
       if(res.status){
         response= true;

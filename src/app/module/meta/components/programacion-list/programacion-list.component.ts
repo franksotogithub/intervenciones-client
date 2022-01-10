@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { GerenciaUI } from '@app/module/maestro/shared/models/gerencia/gerencia.ui';
+import { ProgramaUI } from '@app/module/maestro/shared/models/programa/programa.ui';
+import { GerenciaService } from '@app/module/maestro/shared/services/gerencia/gerencia.service';
+import { ProgramaService } from '@app/module/maestro/shared/services/programa/programa.service';
 import { ConfirmationService } from 'primeng/api';
 import { MetaAnualUI } from '../../shared/models/meta-anual/meta-anual.ui';
 import { ProgramacionUI } from '../../shared/models/programacion/programacion.ui';
@@ -14,16 +18,23 @@ import { ProgramacionService } from '../../shared/services/programacion/programa
     providers:[ConfirmationService]
 })
 export class ProgramacionListComponent implements OnInit {
-  filters ={ };
+  programas : ProgramaUI[]=[];
+  gerencias: GerenciaUI[]=[];
+  anio=new Date().getFullYear();
+  filters ={ asi_anio:this.anio ,pro_id:null,ger_id:null}
   metas : MetaAnualUI[] =[];
   programaciones : ProgramacionUI[]=[];
   loading= false;
-  constructor(private programacionService: ProgramacionService, private router:Router,private confirmationService: ConfirmationService,private metaAnualService: MetaAnualService ) { }
+  constructor(private programacionService: ProgramacionService, private router:Router,private confirmationService: ConfirmationService,private metaAnualService: MetaAnualService
+    , private gerenciaService: GerenciaService ,
+    private programaService: ProgramaService
+    ) { }
 
   ngOnInit(): void {
     this.list();
     this.metasList();
-
+this.programaList();
+this.gerenciaList();
     }
 
   actualizar(programacion:ProgramacionUI){
@@ -83,7 +94,25 @@ changeFilter(){
 
   }
 
+  programaList(){
 
+    this.programaService.programaList()?.subscribe((res)=>{
+      if(res)
+      {
+        this.programas = res;
+
+      }
+
+    });
+  }
+
+  gerenciaList(){
+    this.gerenciaService.gerenciaList()?.subscribe((res)=>{
+      if(res){
+        this.gerencias=res;
+      }
+    })
+  }
 
 
 }

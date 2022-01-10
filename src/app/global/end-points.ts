@@ -56,4 +56,21 @@ export class EndPoints
   public static get EJECUCION_UPDATE():string{return `${this.BASE_ENDPOINT}/upd_ejecucion`}
   public static get EJECUCION_DELETE():string{return `${this.BASE_ENDPOINT}/del_ejecucion`}
 
+
+  public static get EJECUCION_ACTIVIDAD_LIST():string{return `${this.BASE_ENDPOINT}/sel_ejecucion_actividad`}
+  public static get EJECUCION_ACTIVIDAD_UPDATE():string{return `${this.BASE_ENDPOINT}/upd_ejecucion_actividad`}
+  public static get EJECUCION_ACTIVIDAD_DELETE():string{return `${this.BASE_ENDPOINT}/del_ejecucion_actividad`}
+
+
+  public static get EJECUCION_EVIDENCIA_LIST():string{return `${this.BASE_ENDPOINT}/sel_ejecucion_evidencia`}
+  public static get EJECUCION_EVIDENCIA_UPDATE():string{return `${this.BASE_ENDPOINT}/upd_ejecucion_evidencia`}
+  public static get EJECUCION_EVIDENCIA_DELETE():string{return `${this.BASE_ENDPOINT}/del_ejecucion_evidencia`}
+
+  public static get EJECUCION_VALIDACION_LIST():string{return `${this.BASE_ENDPOINT}/sel_ejecucion_validacion`}
+  public static get EJECUCION_VALIDACION_UPDATE():string{return `${this.BASE_ENDPOINT}/upd_ejecucion_validacion`}
+  public static get EJECUCION_VALIDACION_DELETE():string{return `${this.BASE_ENDPOINT}/del_ejecucion_validacion`}
+
+  public static get PERSONA_LIST():string{return `${this.BASE_ENDPOINT}/sel_persona`}
+  public static get UPLOAD():string{return `${this.BASE_ENDPOINT}/upload`}
+
 }
