@@ -60,7 +60,7 @@ export class ProgramacionFormComponent implements OnInit ,AfterViewInit{
   wkid=4326;
 
 
-  prg_tipos =[{prg_tipo:1,prg_tipo_desc:'Punto'} , {prg_tipo:2,prg_tipo_desc:'Barrio'}]
+  prg_tipos =[{prg_tipo:1,prg_tipo_desc:'General'} , {prg_tipo:2,prg_tipo_desc:'Barrio'}]
   feature:any;
   pac_programado:number=0;
   programacionActividades: ProgramacionActividadUI[]=[];
